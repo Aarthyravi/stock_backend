@@ -36,6 +36,14 @@ cd stock_backend
 ...... start working 
 
 
+Command to commit changes
+-------------------------
+cd stock_backend
+...... start working 
+git commit -a 
+git push 
+
+
 activate us2stepup_env
 jupyter notebook
 
