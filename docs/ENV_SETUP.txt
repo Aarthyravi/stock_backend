@@ -1,1 +1,32 @@
+Install anaconda 3.6 version 
+	https://www.anaconda.com/download/#linux
+	
+	OR 
+	
+	https://www.anaconda.com/download/#windows
+	
+	OR 
+	
+	https://www.anaconda.com/download/#macos
+	
 
+	
+conda create -n us2stepup_env python=3.6 jupyter numpy pandas PyMySQL PyMongo
+
+
+Install Firebase setup 
+	http://ozgur.github.io/python-firebase/
+	pip install requests
+	pip install python-firebase
+	pip install pandas-datareader
+	pip install pixiedust
+	
+mongodb mysql 
+github clone u2stepup 
+
+cd c:\Users\ravid\u2stepup
+activate us2stepup_env
+jupyter notebook
+
+
+jupyter nbconvert --to python PerformanceAnalysis_prod.ipynb 
