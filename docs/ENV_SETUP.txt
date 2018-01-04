@@ -1,3 +1,6 @@
+Tools to install and create virtual environment 
+-----------------------------------------------
+
 Install anaconda 3.6 version 
 	https://www.anaconda.com/download/#linux
 	
@@ -11,7 +14,7 @@ Install anaconda 3.6 version
 	
 
 	
-conda create -n us2stepup_env python=3.6 jupyter numpy pandas PyMySQL PyMongo
+conda create -n stock_backend_env python=3.6 jupyter numpy pandas PyMySQL PyMongo
 
 
 Install Firebase setup 
@@ -51,8 +54,14 @@ git commit -a
 git push 	
 
 
-activate us2stepup_env
+Steps to start the Jupyter environment 
+------------------------------------
+cd stock_backend
+...... start working 
+activate stock_backend_env
 jupyter notebook
 
 
-jupyter nbconvert --to python PerformanceAnalysis_prod.ipynb 
+Steps to extract a python script from a jupyter environment 
+-------------------------------------------------------------
+jupyter nbconvert --to python <PROJECTNAME>.ipynb 
