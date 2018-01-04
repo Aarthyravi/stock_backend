@@ -1,0 +1,115 @@
+Account management
+	Interface to Create Account
+
+Reference Tables
+----------------
+		SymbolTable 
+			SymbolName        : String 
+			SymbolType        : int 
+			SymbolID          : int              : Primary key : Auto
+			SymbolDescription : String 
+			TransactionAllowed : IN/OUT/INOUT
+			EventNotification  : YES/NO 
+
+		PortfolioDetails
+			PortfolioName          : String 
+			PortfolioID            : int              : Primary key : Auto
+			PortfolioDescription   : String 
+			TransactionAllowed     : IN/OUT/INOUT
+
+		TransactionType 
+			TransactionTypeId    :  int                :  Primary key : Auto
+			TransactionType      :  FundIn|FundOut|Buy|Sell|divident
+			
+		PaymentType
+			PaymentTypeId    :  int                    :  Primary key : Auto
+			PaymentType      :  Credit|Debit|Advance
+
+Moderately updated Tables 		
+-------------------------------		
+		StockInvetory
+		        StockInvetoryID       : int              : Primary key : Auto 
+			SymbolID              : Foreign
+			NumberOfSharesinStock : Float
+			AverageCost           : Float
+			TotalInvestment       :
+			CAGR                  : 
+			Geomean 	      :
+		PortfolioInvetory
+			PortfolioID          :  int              : Primary key 
+			TransactionId        :  ForeignKey 
+			SymbolID             :  ForeignKey 
+			AverageCost           : Float
+			TotalInvestment       :
+			CAGR                  : 
+			Geomean 	      :			
+
+		TransactionLedger 
+			TransactionTypeId      : Foreign
+		        TransactionId        :  int                    :  Primary key : Auto
+		        PortfolioID          : int 
+		        SymbolID             : int 
+		        Quantity             : float 
+		        PricePerShare        : float 
+		        NetAmount            : float
+		        PaymentTypeId        :  Foreign
+			TransactionDate      :  Date
+			TransactionTime      :  Date
+			Commision            :
+			Tax                  :
+			Processed            : 
+
+		StockDailyTable  (http://francescopochetti.com/stock-market-prediction-part-introduction/)
+			Date          : Date :  in days
+			OpenPrice     : price of the stock at the opening of the trading (in US dollars)
+			High 	      : highest price of the stock during the trading day (in US dollars)
+			Low 	      :	 lowest price of the stock during the trading day (in US dollars)
+			Close         : price of the stock at the closing of the trading (in US dollars)
+			Volume        : amount of stocks traded (in US dollars)
+			Adj Close     : price of the stock at the closing of the trading adjusted with dividends (in US dollars)
+			50DaySMA      :    
+			200DaySMA     :    
+		 
+			
+		NotificationTable
+			NotificaionID                 : 
+			NotificationQuery             :  Query command 
+			NotificationOutputType        :  Intermediate|
+			NotificationOutputProcess     :  Python command to process the query output and decision
+			NotificationProcessInterval   :
+			NotificationResult            :  
+			NotificationIndicatorColor    :   Green|red|yellow
+			NotificationIndicator         :   DownArrow|UpArrow			
+			NotificationLastProcessedDate :
+			NotificationLastProcessedTime :				
+				
+ 	
+ 	
+ High level flow 
+ ---------------
+ 	A symbol can be part of a portfolio only 
+ 	A portfolio can have N symbol 
+ 	Symbols in different portfolio's will be consolidated in StockInvetory
+ 	
+  
+Add any new symbol info in SymbolTable
+
+Add any new portfolio in PortfolioDetails
+
+Add a transaction  in TransactionLedger
+	Process each record in the TransactionLedger , update the PortfolioInvetory and StockInvetory
+	Mark the row as Processed 
+	
+Every day three time , get the stock price of the stocks in the Portfolio and update the StockDailyTable
+
+Perform the following calculations 50SMA and 200SMA and update StockDailyTable
+
+Perform the CAGR calculations for PorfolioInventry and StockInventory 
+
+Notifications 
+	Price low watch volume 
+ 	Price high watch volume 
+ 	Mark the status indicator based on Moving average and alert the problem or praise the possible increase in price 
+ 	Mark the profit or loss of stocksInventory and portfolioInventory  
+ 	Update the CAGR statuc for  stocksInventory and portfolioInventory  
+ 	Update GeoMean calculations based status 
