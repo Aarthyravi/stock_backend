@@ -32,6 +32,9 @@ github clone https://github.com/Aarthyravi/stock_backend.git
 
 
 cd stock_backend
+git config --global user.name "Aarthyravi"  (first time only)
+git config --global user.email "aarthydravi@gmail.com"  (first time only)
+
 
 ...... start working 
 
@@ -41,7 +44,11 @@ Command to commit changes
 cd stock_backend
 ...... start working 
 git commit -a 
-git push 
+
+	press "i" Add description 
+	Press "ESC" key and then ":wq"
+
+git push 	
 
 
 activate us2stepup_env
