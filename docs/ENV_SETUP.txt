@@ -22,9 +22,20 @@ Install Firebase setup
 	pip install pixiedust
 	
 mongodb mysql 
-github clone u2stepup 
 
-cd c:\Users\ravid\u2stepup
+Steps to start working on the project 
+--------------------------------------
+
+cd <TO a local folder>
+
+github clone https://github.com/Aarthyravi/stock_backend.git 
+
+
+cd stock_backend
+
+...... start working 
+
+
 activate us2stepup_env
 jupyter notebook
 
