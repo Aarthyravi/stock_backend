@@ -3,42 +3,57 @@ Account management
 
 Reference Tables
 ----------------
-		SymbolTable 
-			SymbolName        : String 
-			SymbolType        : int 
-			SymbolID          : int              : Primary key : Auto
-			SymbolDescription : String 
-			TransactionAllowed : IN/OUT/INOUT
-			EventNotification  : YES/NO 
+		stockdetails_table 
+			id	          : int 
+			companysymbol     : String
 
+		stockprices_table
+		        id integer PRIMARY KEY,
+		        date date NOT NULL,
+		        stockdetails_id interger NOT NULL,
+		        openvalue real NOT NULL,
+		        highvalue real NOT NULL,
+		        lowvalue real NOT NULL,
+		        closevalue real NOT NULL,
+		        adjclose real NOT NULL,
+                        volume integer NOT NULL,
+                        50DayAverageVolume - ???
+                        100DayAverageVolume - ???                        
+                        365DayAverageVolume - ???                                                
+                        50DayMovingAveragePrice - ???
+                        100DayMovingAveragePrice - ???                        
+
+                        
+
+		PortfolioOwner: 	
+			ID :
+			Name :
+s
 		PortfolioDetails
 			PortfolioName          : String 
+			PortfolioOwner         : ForeignKey
 			PortfolioID            : int              : Primary key : Auto
 			PortfolioDescription   : String 
-			TransactionAllowed     : IN/OUT/INOUT
+			TransactionAllowed     : Active/not active 
 
-		TransactionType 
-			TransactionTypeId    :  int                :  Primary key : Auto
-			TransactionType      :  FundIn|FundOut|Buy|Sell|divident
-			
-		PaymentType
-			PaymentTypeId    :  int                    :  Primary key : Auto
-			PaymentType      :  Credit|Debit|Advance
 
 Moderately updated Tables 		
 -------------------------------		
 		StockInvetory
 		        StockInvetoryID       : int              : Primary key : Auto 
 			SymbolID              : Foreign
+			GroupID               :
 			NumberOfSharesinStock : Float
-			AverageCost           : Float
+			CurrentPrice          : Float
 			TotalInvestment       :
 			CAGR                  : 
 			Geomean 	      :
-		PortfolioInvetory
+			AverageVolume         :
+			
+			
+		PortfolioLedger
 			PortfolioID          :  int              : Primary key 
 			TransactionId        :  ForeignKey 
-			SymbolID             :  ForeignKey 
 			AverageCost           : Float
 			TotalInvestment       :
 			CAGR                  : 
