@@ -17,9 +17,12 @@ Reference Tables
 		        closevalue real NOT NULL,
 		        adjclose real NOT NULL,
                         volume integer NOT NULL,
+                        10DayAverageVolume - ???
                         50DayAverageVolume - ???
                         100DayAverageVolume - ???                        
                         365DayAverageVolume - ???                                                
+                        MaximumVolumePerDay     - ???
+                        MinimumVolumePerDay     - ???                        
                         50DayMovingAveragePrice - ???
                         100DayMovingAveragePrice - ???                        
 
