@@ -3,11 +3,12 @@ Account management
 
 Reference Tables
 ----------------
-		stockdetails_table 
+		stockdetails 
 			id	          : int 
-			companysymbol     : String
+			companysymbol     : String : NOTNULL
+			companyname       : String : NOTNULL 
 
-		stockprices_table
+		stockprices
 		        id integer PRIMARY KEY,
 		        date date NOT NULL,
 		        stockdetails_id interger NOT NULL,
@@ -26,68 +27,83 @@ Reference Tables
                         50DayMovingAveragePrice - ???
                         100DayMovingAveragePrice - ???                        
 
-                        
 
-		PortfolioOwner: 	
-			ID :
-			Name :
-s
-		PortfolioDetails
-			PortfolioName          : String 
-			PortfolioOwner         : ForeignKey
-			PortfolioID            : int              : Primary key : Auto
-			PortfolioDescription   : String 
-			TransactionAllowed     : Active/not active 
+		RegisteredOwners
+			FirebaseID 	     : String :  Not null
+			RegisteredOwnerEmail : String    : Not null 
+			RegisteredOwnerID   : NUM AUTO  :  Not null
+			NewUser             : 0|1      (0-NewUser ,1 -Olduser)
 
-
-Moderately updated Tables 		
--------------------------------		
-		StockInvetory
-		        StockInvetoryID       : int              : Primary key : Auto 
-			SymbolID              : Foreign
-			GroupID               :
-			NumberOfSharesinStock : Float
-			CurrentPrice          : Float
-			TotalInvestment       :
-			CAGR                  : 
-			Geomean 	      :
-			AverageVolume         :
+		PortfolioRiskCode
+			PortfolioRiskCodeID 	     : NUM 
+			PortfolioRiskCodeDescription : String   :	may be NULL 
+			PortfolioRiskCodeColorNum    :
 			
-			
+		PortfolioInventory
+			PortfolioName          				: String   : 	Not null 
+			RegisteredOwnerID      				: Foreign  : 	 RegisteredOwners->RegisteredOwnerID : : Not null  	
+			PortfolioID            				: NUM AUTO : 	Primary key : Auto : Not null 
+			PortfolioDescription   				: String   :	may be NULL 
+			TotalInvestedCost      				: NUM  	   :	may be NULL 
+			CurrentValue           				: NUM      :	may be NULL 
+			CAGR                   				: NUM      :	may be NULL 
+			ProfitLossValueComparedtoInitialInvestment      : NUM
+ 			ProfitLossPercentComparedtoInitialInvestment    : NUM
+			ProfitLossValueComparedtoPreviousClose		: NUM
+			ProfitLossPercentComparedtoPreviousClose	: NUM
+			PortfolioRiskCode      				: NUM      :	may be NULL 
+			PortfolioTaxTerm       				: NUM      :	may be NULL 					
+
 		PortfolioLedger
-			PortfolioID          :  int              : Primary key 
-			TransactionId        :  ForeignKey 
+			PortfolioID            : Foreign Key
+			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
+			Date                   :
+			PortfolioCostAsOnDate  :
+			PortfolioValue         :
+
+		StockInventory
+		        StockInvetoryID       : int              : Primary key : Auto 
+			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
+		        PortfolioID           :
+			SymbolID              : Foreign
+			NumberOfSharesinStock : Float
 			AverageCost           : Float
 			TotalInvestment       :
 			CAGR                  : 
-			Geomean 	      :			
-
+			Geomean 	      :
+			TransacationHistory   : String
+			
+		StockLedger
+			PortfolioID               : Foreign Key
+			RegisteredOwnerID         : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
+			Date                      :
+			NumberOfStocksOnDate      : Num
+			AverageCostOfStockOnDate  :
+			CurrentValueOfStockOnDate :
+		
+		
+		TransactionType
+			TransactionTypeId : NUM 
+			TransactionTypeDescr: String   (SELL,BUY,DIVIDENT,SPLIT)
+		
 		TransactionLedger 
-			TransactionTypeId      : Foreign
-		        TransactionId        :  int                    :  Primary key : Auto
-		        PortfolioID          : int 
-		        SymbolID             : int 
-		        Quantity             : float 
-		        PricePerShare        : float 
-		        NetAmount            : float
-		        PaymentTypeId        :  Foreign
-			TransactionDate      :  Date
-			TransactionTime      :  Date
-			Commision            :
-			Tax                  :
-			Processed            : 
+			TransactionTypeId                           : Foreign
+		        TransactionId                               : int                    :  Primary key : Auto
+		        PortfolioID                                 : Foreign 
+		        SymbolID                                    : Foreign 
+		        Quantity                                    : float 
+		        PricePerShare                               : float 
+		        NetAmount                                   : float
+		        PaymentTypeId                               : Foreign
+			TransactionDate                             : Date
+			TransactionTime                             : Time may be null
+			BrokerFee                                   :
+			Tax                 			    :
+			TransactionProcessedInternally              : 1|0  (default 0)
+			
 
-		StockDailyTable  (http://francescopochetti.com/stock-market-prediction-part-introduction/)
-			Date          : Date :  in days
-			OpenPrice     : price of the stock at the opening of the trading (in US dollars)
-			High 	      : highest price of the stock during the trading day (in US dollars)
-			Low 	      :	 lowest price of the stock during the trading day (in US dollars)
-			Close         : price of the stock at the closing of the trading (in US dollars)
-			Volume        : amount of stocks traded (in US dollars)
-			Adj Close     : price of the stock at the closing of the trading adjusted with dividends (in US dollars)
-			50DaySMA      :    
-			200DaySMA     :    
-		 
+                        
+*********** TODO ************		 
 			
 		NotificationTable
 			NotificaionID                 : 
