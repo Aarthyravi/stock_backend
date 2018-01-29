@@ -52,6 +52,12 @@ git config --global user.email "aarthydravi@gmail.com"  (first time only)
 
 ...... start working 
 
+Open Windows Credential Manager. The easiest method is [Start] -> Type "cred" -> Click on "Credential Manager" tile.
+Click "Windows Credentials" tab (icon is a vault with a computer, not the vault with a globe).
+Scan the list for any "git:https://" prefixed entries.
+Delete any entries related to the Git repository in question.
+Aaarthy access token : 9d88b3dc3643a1a6746ced998de7688fc11bf0bc
+
 
 Command to commit changes
 -------------------------
