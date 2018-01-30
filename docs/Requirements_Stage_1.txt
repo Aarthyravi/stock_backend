@@ -37,6 +37,15 @@ Reference Tables
 		PortfolioRiskCode
 			PortfolioRiskCodeID 	     : NUM 
 			PortfolioRiskCodeDescription : String   :	may be NULL 
+			PortfolioRiskCodeColorNum    :  
+				100 - good - profit - green 
+				101  - ok  - no profit no loss - yellow 
+				102  - bad  - bad - loss in the range of 1% to 10%
+				101 - Current va  
+				102 -													
+		StockRiskCode
+			PortfolioRiskCodeID 	     : NUM 
+			PortfolioRiskCodeDescription : String   :	may be NULL 
 			PortfolioRiskCodeColorNum    :
 			
 		PortfolioInventory
@@ -47,14 +56,16 @@ Reference Tables
 			TotalInvestedCost      				: NUM  	   :	may be NULL 
 			CurrentValue           				: NUM      :	may be NULL 
 			CAGR                   				: NUM      :	may be NULL 
-			ProfitLossValueComparedtoInitialInvestment      : NUM
- 			ProfitLossPercentComparedtoInitialInvestment    : NUM
+			ProfitLossValueComparedtoCostInvestment         : NUM
+ 			ProfitLossPercentComparedtoCostInvestment       : NUM
 			ProfitLossValueComparedtoPreviousClose		: NUM
 			ProfitLossPercentComparedtoPreviousClose	: NUM
 			PortfolioRiskCode      				: NUM      :	may be NULL 
-			PortfolioTaxTerm       				: NUM      :	may be NULL 					
+			PortfolioActionCode    				: NUM      :	may be NULL 
+			PortfolioTaxLongTermPercent 			: NUM      :	may be NULL 					
+			PortfolioTaxShortTermPercent 			: NUM      :	may be NULL 					
 
-		PortfolioLedger
+		PortfolioValueLedger
 			PortfolioID            : Foreign Key
 			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
 			Date                   :
@@ -62,25 +73,34 @@ Reference Tables
 			PortfolioValue         :
 
 		StockInventory
-		        StockInvetoryID       : int              : Primary key : Auto 
+		        StockInvetoryID       				: int              : Primary key : Auto 
+			RegisteredOwnerID     				: Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
+			SymbolID              				: Foreign
+			NumberOfStock 					: Float
+			AverageCost           				: Float
+			TotalInvestment       				:
+			CAGR                  				: 
+			Geomean 	      				:
+			PercentageOfOverallInvestmentByOwner:
+			ProfitLossValueComparedtoCostInvestment         : NUM
+ 			ProfitLossPercentComparedtoCostInvestment       : NUM
+			ProfitLossValueComparedtoPreviousClose		: NUM
+			ProfitLossPercentComparedtoPreviousClose	: NUM
+			PortfolioTaxTerm       				: NUM      :	may be NULL 					
+			StockRiskCode					: NUM      :	may be NULL                                   
+			StockActionCode					: NUM      :	may be NULL                                   
+
+			
+		StockInventoryLedger 
+			StockInventoryLedgeID : int              : Primary key : Auto 
+			TransactionId         : int              : Foreign key : Auto
 			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
-		        PortfolioID           :
+			PortfolioID           : Foreign
 			SymbolID              : Foreign
 			NumberOfSharesinStock : Float
-			AverageCost           : Float
-			TotalInvestment       :
-			CAGR                  : 
-			Geomean 	      :
-			TransacationHistory   : String
-			
-		StockLedger
-			PortfolioID               : Foreign Key
-			RegisteredOwnerID         : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
-			Date                      :
-			NumberOfStocksOnDate      : Num
-			AverageCostOfStockOnDate  :
-			CurrentValueOfStockOnDate :
-		
+			TotalCost             : Float
+			PricePerStock         : Float 
+			Quantity              : Float  
 		
 		TransactionType
 			TransactionTypeId : NUM 
