@@ -32,9 +32,19 @@
     // Add Signup Event
     btnSignup.addEventListener('click', e => {
       // Get email and password
+
       const email = txtEmail.value;
       const pass = txtPassword.value;
       const auth = firebase.auth();
+      var user = firebase.auth().currentUser;
+
+      user.sendEmailVerification().then(function() {
+        user.sendEmailVerification();
+       // Email sent.
+        }).catch(function(error) {
+       // An error happened.
+        });
+        
       // Sign in
       const promise = auth.createUserWithEmailAndPassword(email,pass);
       promise.catch(e => console.log(e.message));
@@ -42,9 +52,7 @@
 
     // Add Logout Event
     btnLogout.addEventListener('click', e => {
-      $('#txtEmail').text("");
-      document.getElementById('txtEmail').innerHTTML ='';
-      document.getElementById('txtPassword').innerHTTML ='';
+
       firebase.auth().signOut();
     });
 
