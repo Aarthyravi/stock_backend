@@ -23,6 +23,44 @@ function listAllUsers(nextPageToken) {
     .then(function(listUsersResult) {
       listUsersResult.users.forEach(function(userRecord) {
         console.log("user", userRecord.toJSON());
+
+        // sqlite3 database connection
+        const sqlite3 = require('sqlite3').verbose();
+
+        var db = new sqlite3.Database('C:\\\\Users\\Ravi\\Downloads\\stock_backend\\stocksqlite.db', (err) => {
+         if (err) {
+              console.error(err.message);
+          }
+         console.log('Connected to the stocksqlite database.');
+         });
+
+          // insert one row into the registeredownerstable
+          db.run('INSERT INTO registeredowners(registeredownerid,firebaseID,registeredowneremail,newuser) VALUES(Null,?,?,?)', [userRecord.uid,userRecord.email,0], function(err) {
+            if (err) {
+              return console.log(err.message);
+            }
+
+            console.log('A row has been inserted');
+          });
+            // select all row in registeredowners
+            db.all("SELECT * FROM registeredowners", function(err, rows) {
+              rows.forEach(function (row) {
+                console.log(row.registeredownerid, row.firebaseID,row.registeredowneremail,row.newuser);
+              })
+            });
+
+          // delete all row
+          db.run('DELETE FROM registeredowners', function(err) {
+            if (err) {
+              return console.error(err.message);
+             }
+            console.log('Row(s) deleted');
+         });
+
+          // close the database connection
+          db.close();
+
+
       });
       if (listUsersResult.pageToken) {
         // List next batch of users.
