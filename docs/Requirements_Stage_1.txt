@@ -82,6 +82,14 @@ Reference Tables
 			PortfolioDescription   				: String   :	may be NULL 
 			TotalInvestedCost      				: NUM  	   :	may be NULL 
 			CurrentValue           				: NUM      :	may be NULL 
+
+
+		PortfolioValueLedger
+			PortfolioID            : Foreign Key
+			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
+			Date                   :
+			PortfolioCostAsOnDate  :
+			PortfolioValue         :
 			CAGR                   				: NUM      :	may be NULL 
 			ProfitLossValueComparedtoCostInvestment         : NUM
  			ProfitLossPercentComparedtoCostInvestment       : NUM
@@ -94,25 +102,16 @@ Reference Tables
 			LastUpdatedDate                                 : Date 
 			LastUpdatedTime                                 : Date 
 
-
-		PortfolioValueLedger
-			PortfolioID            : Foreign Key
-			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
-			Date                   :
-			PortfolioCostAsOnDate  :
-			PortfolioValue         :
-
 		StockInventory
 		        StockInvetoryID       				: int              : Primary key : Auto 
 			RegisteredOwnerID     				: Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
-			SymbolID              				: Foreign
+			StockID(stockdetails->id)        		: Foreign
 			NumberOfStock 					: Float
 			AverageCost           				: Float
 			TotalInvestment       				:
 			CAGR                  				: 
 			Geomean 	      				:
 			PortfolioTaxTerm       				: NUM      :	may be NULL 					
-			CurrentValue           				: NUM      :	may be NULL 
 
 		StockValueLedger
 			StockValueLedgerID 
@@ -123,6 +122,7 @@ Reference Tables
 			ProfitLossPercentComparedtoPreviousClose	: NUM
 			StockRiskCodeID					: NUM      :	may be NULL                                   
 			StockActionRecommendationCodeID			: NUM      :	may be NULL                                   
+			CurrentValue           				: NUM      :	may be NULL 
 			LastUpdatedDate                                 : Date 
 			LastUpdatedTime                                 : Date 
 
@@ -166,6 +166,38 @@ Reference Tables
  	
  High level flow 
  ---------------
+ 	GetFirebaseNewUserFlow:
+ 		where :
+ 			This flow is done at NodejS with sqlite as a separate script
+ 			
+ 		when  : 
+ 			manually once in a while or when we now a new user got added   
+ 		
+ 		who   :
+ 			RegisteredOwners
+ 			
+ 		what :
+			This script traverse the firebase UID and checks any new user and updates the 
+			"RegisteredOwners" table if a new user found and also marks 
+			RegisteredOwners->NewUser as "0" Zero 
+ 	
+	GetStockDataFlow :
+ 		where :
+ 			This update would be done by a separate script
+ 		when  : 
+ 			Every one hour  
+ 		
+ 		who   :
+ 			stockdetails          --->
+ 			StockInventory        --->
+ 			stockprices (table)   --->
+ 			PortfolioInventory
+ 			PortfolioValueLedger
+ 			StockValueLedger
+ 		what :
+			For each stock in "StockInventory" 
+				get stock prices from Yahoo and update "stockprices" table 
+
  	Transactionflow
  		where :
  			This update would be done by a separate script or manually 
@@ -175,7 +207,7 @@ Reference Tables
  		what :
 			TransactionLedger gets updated from the brokerage account 
 			During the initial entry from brokerage account "TransactionLedger:TransactionProcessedInternally" will be set to 0(Zero)
- 	
+
  	TransactionProcessingflow
  		where :
  			This update would be done by a separate script
@@ -212,23 +244,7 @@ Reference Tables
 			Check StockInventoryLedger for  "StockInventoryLedger:LedgerUpdated" set to 1(one)
 			Gets the details and update the respective entry in "StockInventory"
 			Change "StockInventoryLedger:LedgerUpdated" set to 0 (Zero)
-	
-
-	GetStockDataFlow :
- 		where :
- 			This update would be done by a separate script
- 		when  : 
- 			Every one hour  
- 		
- 		who   :
- 			stockprices
- 			StockInventory
- 			PortfolioInventory
- 			PortfolioValueLedger
- 		what :
-			Get stock prices from Yahoo and update "stockprices" table 
-			Update the values in 
-			
+				
 			
 	StockHealthMonitorFlow_1:
 
