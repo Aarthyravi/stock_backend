@@ -34,19 +34,46 @@ Reference Tables
 			RegisteredOwnerID   : NUM AUTO  :  Not null
 			NewUser             : 0|1      (0-NewUser ,1 -Olduser)
 
+		PortfolioRiskCodeStrategy 
+			PortfolioRiskCodeStrategyID : int 
+			StrategyDescription         : String 
+				1 - Investment protection 	- monitor if the investment is in loss  	
+				2 - Value for Aging Investment  - monitor if the investment grows with time   	
+				
 		PortfolioRiskCode
 			PortfolioRiskCodeID 	     : NUM 
-			PortfolioRiskCodeDescription : String   :	may be NULL 
+			PortfolioRiskCodeStrategyID  : Foreign  
+			PortfolioRiskCodeStatus    :
 			PortfolioRiskCodeColorNum    :  
-				100 - good - profit - green 
-				101  - ok  - no profit no loss - yellow 
-				102  - bad  - bad - loss in the range of 1% to 10%
-				101 - Current va  
-				102 -													
+				100 - 1 - good 		- profit 				- GREEN 
+				101 - 1 - ok  		- no profit no loss 			- YELLOW 
+				102 - 1 - bad 	 	- loss in the range of 1% to 10%	- RED
+				101 - 1 - very bad	- loss greater than 10%			- BLACK									
+		
+		PortfolioActionRecommendationCode
+			PortfolioActionRecommendationCodeID : NUM 
+			Recommendation                      : SELL | BUY | SELL PARTIALY | BUY PARTIALLY | EXIT COMPLETELY
+			
+		StockRiskCodeStrategy 
+			StockRiskCodeStrategyID : int 
+			StrategyDescription         : String 
+				200 - Investment protection 	- monitor if the investment is in loss  	
+				201 - Value for Aging Investment  - monitor if the investment grows with time 
+				202 - Check stock Financials      - monitor latest stock financials and decide further 
+				
 		StockRiskCode
-			PortfolioRiskCodeID 	     : NUM 
-			PortfolioRiskCodeDescription : String   :	may be NULL 
-			PortfolioRiskCodeColorNum    :
+			StockRiskCodeID 	     : NUM 
+			StockRiskCodeStrategyID  : Foreign  
+			StockRiskCodeStatus    :
+			StockRiskCodeColorNum    :  
+				100 - 1 - good 		- profit 				- GREEN 
+				101 - 1 - ok  		- no profit no loss 			- YELLOW 
+				102 - 1 - bad 	 	- loss in the range of 1% to 10%	- RED
+				101 - 1 - very bad	- loss greater than 10%			- BLACK											
+
+		StockActionRecommendationCode
+			StockActionRecommendationCodeID : NUM 
+			Recommendation                      : SELL | BUY | SELL PARTIALY | BUY PARTIALLY | EXIT COMPLETELY
 			
 		PortfolioInventory
 			PortfolioName          				: String   : 	Not null 
@@ -61,9 +88,12 @@ Reference Tables
 			ProfitLossValueComparedtoPreviousClose		: NUM
 			ProfitLossPercentComparedtoPreviousClose	: NUM
 			PortfolioRiskCode      				: NUM      :	may be NULL 
-			PortfolioActionCode    				: NUM      :	may be NULL 
+			PortfolioActionRecommendationCodeID        	: NUM      :	may be NULL 
 			PortfolioTaxLongTermPercent 			: NUM      :	may be NULL 					
 			PortfolioTaxShortTermPercent 			: NUM      :	may be NULL 					
+			LastUpdatedDate                                 : Date 
+			LastUpdatedTime                                 : Date 
+
 
 		PortfolioValueLedger
 			PortfolioID            : Foreign Key
@@ -81,14 +111,20 @@ Reference Tables
 			TotalInvestment       				:
 			CAGR                  				: 
 			Geomean 	      				:
+			PortfolioTaxTerm       				: NUM      :	may be NULL 					
+			CurrentValue           				: NUM      :	may be NULL 
+
+		StockValueLedger
+			StockValueLedgerID 
 			PercentageOfOverallInvestmentByOwner:
 			ProfitLossValueComparedtoCostInvestment         : NUM
  			ProfitLossPercentComparedtoCostInvestment       : NUM
 			ProfitLossValueComparedtoPreviousClose		: NUM
 			ProfitLossPercentComparedtoPreviousClose	: NUM
-			PortfolioTaxTerm       				: NUM      :	may be NULL 					
-			StockRiskCode					: NUM      :	may be NULL                                   
-			StockActionCode					: NUM      :	may be NULL                                   
+			StockRiskCodeID					: NUM      :	may be NULL                                   
+			StockActionRecommendationCodeID			: NUM      :	may be NULL                                   
+			LastUpdatedDate                                 : Date 
+			LastUpdatedTime                                 : Date 
 
 			
 		StockInventoryLedger 
@@ -101,6 +137,8 @@ Reference Tables
 			TotalCost             : Float
 			PricePerStock         : Float 
 			Quantity              : Float  
+			LedgerUpdated         :   0 - not updated
+						  1 - updated 	
 		
 		TransactionType
 			TransactionTypeId : NUM 
@@ -119,10 +157,97 @@ Reference Tables
 			TransactionTime                             : Time may be null
 			BrokerFee                                   :
 			Tax                 			    :
+			StockBrokerID                               :
+			StockBrokerTransactionID                    :
 			TransactionProcessedInternally              : 1|0  (default 0)
-			
 
                         
+ 	
+ 	
+ High level flow 
+ ---------------
+ 	Transactionflow
+ 		where :
+ 			This update would be done by a separate script or manually 
+ 		when  : 
+ 			Occasianally needs manual effort to export the report from the brokerage account 
+ 			
+ 		what :
+			TransactionLedger gets updated from the brokerage account 
+			During the initial entry from brokerage account "TransactionLedger:TransactionProcessedInternally" will be set to 0(Zero)
+ 	
+ 	TransactionProcessingflow
+ 		where :
+ 			This update would be done by a separate script
+ 		when  : 
+ 			immediately aftet "Transactionflow" happens   
+ 		
+ 		who   :
+ 			TransactionLedger
+ 			
+ 			"StockInventoryLedger" is a copy of the "TransactionLedger" . It helps in doing addition/subtraction 
+			of stocks on a particular transaction ID, i.e it helps in manipulating a transaction by having a
+			copy of the transaction 
+			
+ 		what :
+			Check TransactionLedger for  "TransactionLedger:TransactionProcessedInternally" set to 0(Zero)
+			Gets the details of the transaction ID and other details and updates the "StockInventoryLedger"
+			Change "TransactionLedger:TransactionProcessedInternally" set to 1 (One)
+			 
+				
+	StockInventoryLedgerFlow		
+ 		where :
+ 			This update would be done by a separate script
+ 		when  : 
+ 			immediately aftet "TransactionProcessingflow" happens   
+ 		
+ 		who   :
+ 			"StockInventoryLedger" is a copy of the "TransactionLedger" . It helps in doing addition/subtraction 
+			of stocks on a particular transaction ID, i.e it helps in manipulating a transaction by having a
+			copy of the transaction 
+			
+			StockInventory
+			
+ 		what :
+			Check StockInventoryLedger for  "StockInventoryLedger:LedgerUpdated" set to 1(one)
+			Gets the details and update the respective entry in "StockInventory"
+			Change "StockInventoryLedger:LedgerUpdated" set to 0 (Zero)
+	
+
+	GetStockDataFlow :
+ 		where :
+ 			This update would be done by a separate script
+ 		when  : 
+ 			Every one hour  
+ 		
+ 		who   :
+ 			stockprices
+ 			StockInventory
+ 			PortfolioInventory
+ 			PortfolioValueLedger
+ 		what :
+			Get stock prices from Yahoo and update "stockprices" table 
+			Update the values in 
+			
+			
+	StockHealthMonitorFlow_1:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 *********** TODO ************		 
 			
 		NotificationTable
@@ -137,29 +262,8 @@ Reference Tables
 			NotificationLastProcessedDate :
 			NotificationLastProcessedTime :				
 				
+
  	
- 	
- High level flow 
- ---------------
- 	A symbol can be part of a portfolio only 
- 	A portfolio can have N symbol 
- 	Symbols in different portfolio's will be consolidated in StockInvetory
- 	
-  
-Add any new symbol info in SymbolTable
-
-Add any new portfolio in PortfolioDetails
-
-Add a transaction  in TransactionLedger
-	Process each record in the TransactionLedger , update the PortfolioInvetory and StockInvetory
-	Mark the row as Processed 
-	
-Every day three time , get the stock price of the stocks in the Portfolio and update the StockDailyTable
-
-Perform the following calculations 50SMA and 200SMA and update StockDailyTable
-
-Perform the CAGR calculations for PorfolioInventry and StockInventory 
-
 Notifications 
 	Price low watch volume 
  	Price high watch volume 
