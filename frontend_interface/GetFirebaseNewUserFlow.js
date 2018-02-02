@@ -31,7 +31,6 @@ function listAllUsers(nextPageToken) {
         var db = new sqlite3.Database('C:\\\\Users\\Ravi\\Downloads\\stock_backend\\stocksqlite.db')
         console.log('Connected to the stocksqlite database.');
 
-
           // insert one row into the registeredownerstable
           db.all("SELECT firebaseID FROM registeredowners where firebaseID=?",[userRecord.uid], function(err, rows) {
             if(rows.length == 0){
@@ -44,7 +43,6 @@ function listAllUsers(nextPageToken) {
 
           });
 
-
             // select all row in registeredowners
             db.all("SELECT * FROM registeredowners", function(err, rows) {
               rows.forEach(function (row) {
@@ -53,10 +51,8 @@ function listAllUsers(nextPageToken) {
               })
             });
 
-
           // close the database connection
           db.close();
-
 
       });
       if (listUsersResult.pageToken) {
