@@ -118,7 +118,6 @@ Reference Tables
 			LastUpdatedDate       				: Date 
 			LastUpdatedTime       				: Date 
 
-
 		StockValueLedger
 			StockValueLedgerID    : Auto 
 			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
@@ -158,7 +157,7 @@ Reference Tables
 			StockBrokerTransactionID                    :
 			TransactionProcessedInternally              : 1|0  (default 0)
 
-                        
+                 
  	
  	
  High level flow 
