@@ -132,8 +132,8 @@ Reference Tables
 			StockRiskCodeID					: NUM      :	may be NULL                                   
 			StockActionRecommendationCodeID			: NUM      :	may be NULL                                   
 			CurrentValue           				: NUM      :	may be NULL 
-			Date                                            : Date 
-			Time		                                : Date 
+			LastUpdatedDate                                 : Date 
+			LastUpdatedTime		                        : Date 
 
 			
 		
@@ -209,7 +209,7 @@ Reference Tables
 				 				Get the latest stock price  stockprices->closevalue
 				 				calculate the current value of the stock
 				 					CurrentValue ="number of symbols" *  stockprices->closevalue
-				 					create a new row at "StockValueLedger"
+				 					update the row at "StockValueLedger"
 				 						update "StockValueLedger->CurrentValue"
 				 						update "StockValueLedger->RegisteredOwnerID" 
 				 						update "StockValueLedger->PortfolioID"
