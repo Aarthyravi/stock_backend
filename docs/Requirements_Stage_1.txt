@@ -106,6 +106,7 @@ Reference Tables
 		StockInventory
 		        StockInvetoryID       				: int              : Primary key : Auto 
 			RegisteredOwnerID     				: Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
+		        PortfolioID                                     : Foreign 
 			StockID(stockdetails->id)        		: Foreign
 			NumberOfStock 					: Float
 			AverageCost           				: Float
@@ -113,6 +114,10 @@ Reference Tables
 			CAGR                  				: 
 			Geomean 	      				:
 			PortfolioTaxTerm       				: NUM      :	may be NULL 					
+			ListOfTransaction     				: String   -> string of TransactionLedger->TransactionId separated by :
+			LastUpdatedDate       				: Date 
+			LastUpdatedTime       				: Date 
+
 
 		StockValueLedger
 			StockValueLedgerID    : Auto 
@@ -131,17 +136,6 @@ Reference Tables
 			Time		                                : Date 
 
 			
-		StockInventoryLedger 
-			StockInventoryLedgeID : int              : Primary key : Auto 
-			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
-			PortfolioID           : Foreign
-			SymbolID              : Foreign
-			NumberOfSharesinStock : Float
-			PricePerStock         : Float 
-			TotalCost             : Float
-			ListOfTransaction     : Srting   -> string of TransactionLedger->TransactionId
-			LastUpdatedDate       : Date 
-			LastUpdatedTime       : Date 
 		
 		TransactionType
 			TransactionTypeId : NUM 
@@ -208,8 +202,8 @@ Reference Tables
 						update "PortfolioInventory->LastUpdatedTime"
 						
 						How To calculate "PortfolioInventory->CurrentValue" of the portfolio ???
-							# As a first process create new entries at "StockValueLedger" with respect each row in StockInventoryLedger
-				 			For each entry in "StockInventoryLedger" where "StockInventoryLedger->PortfolioID" matches "PortfolioInventory->PortfolioID"
+							# As a first process create new entries at "StockValueLedger" with respect to each row in StockInventory
+				 			For each entry in "StockInventory" where "StockInventory->PortfolioID" matches "PortfolioInventory->PortfolioID"
 				 				Get the symbol 
 				 				Get the "number of symbols"
 				 				Get the latest stock price  stockprices->closevalue
@@ -261,33 +255,33 @@ Reference Tables
  		who   :
  			TransactionLedger
  			
- 			"StockInventoryLedger" is a copy of the "TransactionLedger" . It helps in doing addition/subtraction 
+ 			"StockInventory" is a copy of the "TransactionLedger" . It helps in doing addition/subtraction 
 			of stocks on a particular transaction ID, i.e it helps in manipulating a transaction by having a
 			copy of the transaction 
 			
  		what :
 			Check TransactionLedger for  "TransactionLedger:TransactionProcessedInternally" set to 0(Zero)
-			Gets the details of the transaction ID and other details and updates the "StockInventoryLedger"
+			Gets the details of the transaction ID and other details and updates the "StockInventory"
 			Change "TransactionLedger:TransactionProcessedInternally" set to 1 (One)
 			 
 				
-	StockInventoryLedgerFlow		
+	StockInventoryFlow		
  		where :
  			This update would be done by a separate script
  		when  : 
  			immediately aftet "TransactionProcessingflow" happens   
  		
  		who   :
- 			"StockInventoryLedger" is a copy of the "TransactionLedger" . It helps in doing addition/subtraction 
+ 			"StockInventory" is a copy of the "TransactionLedger" . It helps in doing addition/subtraction 
 			of stocks on a particular transaction ID, i.e it helps in manipulating a transaction by having a
 			copy of the transaction 
 			
 			StockInventory
 			
  		what :
-			Check StockInventoryLedger for  "StockInventoryLedger:LedgerUpdated" set to 1(one)
+			Check StockInventory for  "StockInventory:LedgerUpdated" set to 1(one)
 			Gets the details and update the respective entry in "StockInventory"
-			Change "StockInventoryLedger:LedgerUpdated" set to 0 (Zero)
+			Change "StockInventory:LedgerUpdated" set to 0 (Zero)
 				
 			
 	StockHealthMonitorFlow_1:
