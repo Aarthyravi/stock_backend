@@ -82,12 +82,13 @@ Reference Tables
 			PortfolioDescription   				: String   :	may be NULL 
 			TotalInvestedCost      				: NUM  	   :	may be NULL 
 			CurrentValue           				: NUM      :	may be NULL 
+			LastUpdatedDate                                 : Date 
+			LastUpdatedTime                                 : Time 
 
 
 		PortfolioValueLedger
 			PortfolioID            : Foreign Key
 			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
-			Date                   :
 			PortfolioCostAsOnDate  :
 			PortfolioValue         :
 			CAGR                   				: NUM      :	may be NULL 
@@ -99,8 +100,8 @@ Reference Tables
 			PortfolioActionRecommendationCodeID        	: NUM      :	may be NULL 
 			PortfolioTaxLongTermPercent 			: NUM      :	may be NULL 					
 			PortfolioTaxShortTermPercent 			: NUM      :	may be NULL 					
-			LastUpdatedDate                                 : Date 
-			LastUpdatedTime                                 : Date 
+			Date                                            : Date 
+			Time                                            : Time 
 
 		StockInventory
 		        StockInvetoryID       				: int              : Primary key : Auto 
@@ -114,7 +115,10 @@ Reference Tables
 			PortfolioTaxTerm       				: NUM      :	may be NULL 					
 
 		StockValueLedger
-			StockValueLedgerID 
+			StockValueLedgerID    : Auto 
+			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
+			PortfolioID           : Foreign
+			SymbolID              : Foreign
 			PercentageOfOverallInvestmentByOwner:
 			ProfitLossValueComparedtoCostInvestment         : NUM
  			ProfitLossPercentComparedtoCostInvestment       : NUM
@@ -123,22 +127,21 @@ Reference Tables
 			StockRiskCodeID					: NUM      :	may be NULL                                   
 			StockActionRecommendationCodeID			: NUM      :	may be NULL                                   
 			CurrentValue           				: NUM      :	may be NULL 
-			LastUpdatedDate                                 : Date 
-			LastUpdatedTime                                 : Date 
+			Date                                            : Date 
+			Time		                                : Date 
 
 			
 		StockInventoryLedger 
 			StockInventoryLedgeID : int              : Primary key : Auto 
-			TransactionId         : int              : Foreign key : Auto
 			RegisteredOwnerID     : Foreign          : RegisteredOwners->RegisteredOwnerID : : Not null  	
 			PortfolioID           : Foreign
 			SymbolID              : Foreign
 			NumberOfSharesinStock : Float
-			TotalCost             : Float
 			PricePerStock         : Float 
-			Quantity              : Float  
-			LedgerUpdated         :   0 - not updated
-						  1 - updated 	
+			TotalCost             : Float
+			ListOfTransaction     : Srting   -> string of TransactionLedger->TransactionId
+			LastUpdatedDate       : Date 
+			LastUpdatedTime       : Date 
 		
 		TransactionType
 			TransactionTypeId : NUM 
@@ -197,6 +200,47 @@ Reference Tables
  		what :
 			For each stock in "StockInventory" 
 				get stock prices from Yahoo and update "stockprices" table 
+			For each entry in "PortfolioInventory"
+				For each "PortfolioInventory->PortfolioID" in each row of "PortfolioInventory"
+					calculate the "CurrentValue" of the portfolio 
+						update "PortfolioInventory->CurrentValue" 
+						update "PortfolioInventory->LastUpdatedDate"
+						update "PortfolioInventory->LastUpdatedTime"
+						
+						How To calculate "PortfolioInventory->CurrentValue" of the portfolio ???
+							# As a first process create new entries at "StockValueLedger" with respect each row in StockInventoryLedger
+				 			For each entry in "StockInventoryLedger" where "StockInventoryLedger->PortfolioID" matches "PortfolioInventory->PortfolioID"
+				 				Get the symbol 
+				 				Get the "number of symbols"
+				 				Get the latest stock price  stockprices->closevalue
+				 				calculate the current value of the stock
+				 					CurrentValue ="number of symbols" *  stockprices->closevalue
+				 					create a new row at "StockValueLedger"
+				 						update "StockValueLedger->CurrentValue"
+				 						update "StockValueLedger->RegisteredOwnerID" 
+				 						update "StockValueLedger->PortfolioID"
+				 						update "StockValueLedger->SymbolID"
+				 						update "StockValueLedger->Date"
+				 						update "StockValueLedger->Time"				 						
+
+				For each "PortfolioInventory->PortfolioID" and "PortfolioInventory->RegisteredOwnerID" in each row of "PortfolioInventory"
+					
+				 	TotalCost = 0
+				 	
+					For each latest entry in "StockValueLedger"
+						(	
+							where StockValueLedger->Date is current 
+								and 
+							where StockValueLedger->PortfolioID is "PortfolioInventory->PortfolioID"
+								and 
+							where StockValueLedger->RegisteredOwnerID is "PortfolioInventory->RegisteredOwnerID"				 						
+						)
+						Get the "StockValueLedger->CurrentValue"
+						TotalCost = TotalCost + "StockValueLedger->CurrentValue"
+					
+					update "PortfolioInventory->CurrentValue" = TotalCost 
+				 			
+			
 
  	Transactionflow
  		where :
