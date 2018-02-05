@@ -125,8 +125,7 @@ Reference Tables
 			CurrentValue           				: NUM      :	may be NULL 
 			LastUpdatedDate                                 : Date 
 			LastUpdatedTime                                 : Date 
-
-			
+	
 		StockInventoryLedger 
 			StockInventoryLedgeID : int              : Primary key : Auto 
 			TransactionId         : int              : Foreign key : Auto
