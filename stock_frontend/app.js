@@ -9,7 +9,6 @@
     storageBucket: "gs://stock-frontend.appspot.com",
 
   };
-  
   firebase.initializeApp(config);
 
   // Get elements
@@ -45,16 +44,20 @@
         }).catch(function(error) {
        // An error happened.
         });
-        
+
       // Sign in
-      const promise = auth.createUserWithEmailAndPassword(email,pass);
+      const promise = auth.createUserWithEmailAndPassword(email,pass).then(function(user) {
+        return user.updateProfile({'displayName': document.getElementById("txtName").value});
+      });
       promise.catch(e => console.log(e.message));
     });
 
     // Add Logout Event
     btnLogout.addEventListener('click', e => {
 
+      document.getElementById("txtEmail").placeholder = "Email";
       firebase.auth().signOut();
+        
     });
 
 
