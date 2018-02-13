@@ -9,6 +9,7 @@
     storageBucket: "gs://stock-frontend.appspot.com",
 
   };
+  
   firebase.initializeApp(config);
 
   // Get elements
