@@ -3,16 +3,19 @@
  <head>
    <meta charset="utf-8">
    <title>Firebase Authentication Login</title>
-   
+
    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-auth.js"></script>﻿
    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+   <link rel = "stylesheet" href = "style.css">
  </head>
   <body>
-
+    <div class="signup">
       <div class="container">
-        <input id="txtEmail" type="email" placeholder="Email">
-        <input id="txtPassword" type="password" placeholder="Password">
+        <h1> Firebase Login Authentication</h1>
+        <input id="txtEmail" type="email" placeholder="Email"><br><br>
+        <input id="txtName" type="text" placeholder="Name"><br><br>
+        <input id="txtPassword" type="password" placeholder="Password"><br><br>
 
         <button id="btnLogin" class="btn btn-action">
           Log in
@@ -26,8 +29,9 @@
           Log out
         </button>
       </div>
-
+   </div>
    <script src="app.js"></script>
 
   </body>
 </html>
+
