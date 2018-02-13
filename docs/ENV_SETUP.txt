@@ -27,6 +27,12 @@ Install Firebase setup
 	
 mongodb mysql 
 
+nodejs sqlite3(Firebase)
+------------------------
+https://nodejs.org/en/download/
+npm install --save-exact firebase-functions@0.7.0 npm install --save-exact firebase-admin@5.4.0
+npm install sqlite3
+
 Firebase references
 -------------------
 https://firebase.google.com/docs/admin/setup
