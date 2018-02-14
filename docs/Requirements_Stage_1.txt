@@ -27,7 +27,6 @@ Reference Tables
                         50DayMovingAveragePrice - ???
                         100DayMovingAveragePrice - ???                        
 
-
 		RegisteredOwners
 			FirebaseID 	     : String :  Not null
 			RegisteredOwnerEmail : String    : Not null 
