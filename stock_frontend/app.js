@@ -54,21 +54,21 @@
 
     // Add Logout Event
     btnLogout.addEventListener('click', e => {
-
-      document.getElementById("txtEmail").placeholder = "Email";
       firebase.auth().signOut();
-        
     });
-
 
     // Add a realtime listener
     firebase.auth().onAuthStateChanged(firebaseUser => {
       if(firebaseUser){
         console.log(firebaseUser);
-        btnLogout.classList.remove('hide');
+        document.getElementById("btnLogin").style.display = "none";
+        document.getElementById("btnLogout").style.display = "block";
+
       }else {
         console.log('not logged in');
-        btnLogout.classList.add('hide');
+        document.getElementById("btnLogin").style.display = "block";
+        document.getElementById("btnLogout").style.display = "none";
+
       }
     });
 
