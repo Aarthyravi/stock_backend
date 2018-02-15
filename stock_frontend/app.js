@@ -1,7 +1,5 @@
 (function() {
-
   //  Initialize Firebase
-
   var config = {
     apiKey: "AIzaSyCSDyANTievIdqXl5-_akHROQl6rTyr5rg",
     authDomain: "stock-frontend.firebaseapp.com",
@@ -9,6 +7,7 @@
     storageBucket: "gs://stock-frontend.appspot.com",
 
   };
+  
   firebase.initializeApp(config);
 
   // Get elements
