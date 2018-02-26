@@ -1,14 +1,17 @@
 (function() {
   //  Initialize Firebase
+  
   var config = {
     apiKey: "AIzaSyCSDyANTievIdqXl5-_akHROQl6rTyr5rg",
-    authDomain: "stock-frontend.firebaseapp.com",
+    authDomain: "stock-frontend-dc995.firebaseapp.com",
     databaseURL: "https://stock-frontend-dc995.firebaseio.com/",
-    storageBucket: "gs://stock-frontend.appspot.com",
-
+    storageBucket: "stock-frontend.appspot.com",
+    projectId:"stock-frontend",
+    messagingSenderId: "738862320528"
   };
-  
-  firebase.initializeApp(config);
+  var app=firebase.initializeApp(config);
+
+  var db = firebase.firestore(app);
 
   // Get elements
   const txtEmail = document.getElementById('txtEmail');
@@ -58,10 +61,30 @@
 
     // Add a realtime listener
     firebase.auth().onAuthStateChanged(firebaseUser => {
+	    var user = firebase.auth().currentUser;
       if(firebaseUser){
         console.log(firebaseUser);
         document.getElementById("btnLogin").style.display = "none";
         document.getElementById("btnLogout").style.display = "block";
+
+	    //db.collection("PortfolioDetails").where("UID", "==", "YsaBhjl4lLZsSU0PyNNiCa4LO9q1")
+	    db.collection("PortfolioDetails").where("UID", "==", user.uid)
+        .get()
+        .then(function(querySnapshot){
+			querySnapshot.forEach(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data());
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+
+			});
+        }).catch(function(error) {
+		    console.log("Error getting document:", error);
+		});
+
+        console.log(" RAVI 3");
 
       }else {
         console.log('not logged in');
@@ -70,5 +93,4 @@
 
       }
     });
-
 }());
